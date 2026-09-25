@@ -4,15 +4,17 @@
 
 ## 1. What are Data Types?
 
-At the physical hardware level, computer memory does not differentiate between text, numbers, or boolean flags. Memory stores raw bits (`0`s and `1`s). The exact same 64 bits of data could represent an integer, a floating-point number, a character in text, or a memory pointer.
+At the physical Hardware level, computer memory does not differentiate between text, numbers, or boolean flags. Memory stores raw bits (`0`s and `1`s). The exact same 64 bits of data could represent an integer, a floating-point number, a character in text, or a memory pointer.
 
 A **Data Type** is an abstraction/label that dictates how the JavaScript engine interprets and operates on those bits in memory.
 
 A data type answers two fundamental questions:
+
 1. **Meaning:** What does this value represent?
 2. **Operations:** What operations and methods are valid on this value?
 
 ### Why Data Types Matter: The Operator Example
+
 The data type dictates the runtime behavior of operations:
 
 ```javascript
@@ -30,6 +32,7 @@ The data type dictates the runtime behavior of operations:
 ## 2. Core Typing Characteristics of JavaScript
 
 ### A. Dynamically Typed
+
 In JavaScript, types are associated with **values**, not variable bindings. Variables are simply containers that hold values. Therefore, a variable can change its data type dynamically during program execution:
 
 ```javascript
@@ -40,6 +43,7 @@ data = null;          // 'data' now holds Null
 ```
 
 ### B. Weakly Typed (Implicit Type Coercion)
+
 JavaScript does not strictly enforce type boundaries at compile time or runtime. When an operation receives an unexpected type, JavaScript does not throw an immediate type error; instead, it attempts to silently convert (**coerce**) the value into a compatible type:
 
 ```javascript
@@ -112,11 +116,13 @@ Unlike many programming languages (such as C, C++, or Java) that offer separate 
 Every standard number in JavaScript is stored as a **double-precision 64-bit floating-point** format, conforming to the **IEEE 754 standard**.
 
 Because of this:
+
 ```javascript
 console.log(5 === 5.0); // true (Both are identical floating-point representations)
 ```
 
 #### Quirk A: Floating-Point Precision (`0.1 + 0.2 !== 0.3`)
+
 In computer hardware, numbers are stored in base-2 (binary). Fractions like `0.1` and `0.2` cannot be represented precisely in binary with a finite number of bits—they become infinitely repeating binary fractions.
 
 ```javascript
@@ -151,11 +157,15 @@ console.log(typeof NaN);   // "number"
 > `NaN` represents a failed numeric operation. Since the result of a numeric calculation must belong to the numeric type, `NaN` is categorized as a `number`.
 
 **Key Properties of `NaN`:**
+
 - `NaN` is the **only value in JavaScript that is not equal to itself**:
+
   ```javascript
   console.log(NaN === NaN); // false
   ```
+
 - **Checking for `NaN`:**
+
   ```javascript
   // Old global function (Flawed due to coercion):
   isNaN("Hello");         // true (coerces "Hello" to NaN first, misleading!)
@@ -188,12 +198,15 @@ console.log(9007199254740992 === 9007199254740993); // true (Precision loss!)
 #### Quirk D: Special Numeric Values (`Infinity`, `-Infinity`, `-0`)
 
 - **Division by zero** does not throw a crash or error; it yields infinity:
+
   ```javascript
   console.log(10 / 0);   // Infinity
   console.log(-10 / 0);  // -Infinity
   console.log(typeof Infinity); // "number"
   ```
+
 - **Negative Zero (`-0`):**
+
   ```javascript
   console.log(-0 === 0); // true
   ```
@@ -204,7 +217,8 @@ console.log(9007199254740992 === 9007199254740993); // true (Precision loss!)
 
 Introduced in **ES2020**, `BigInt` allows JavaScript to represent integers of arbitrary length with absolute precision, removing the $2^{53} - 1$ limitation.
 
-#### Syntax & Creation:
+#### Syntax & Creation
+
 Append an `n` suffix to any integer, or use the `BigInt()` constructor:
 
 ```javascript
@@ -215,7 +229,8 @@ console.log(typeof largeNumber); // "bigint"
 console.log(9007199254740992n === 9007199254740993n); // false
 ```
 
-#### BigInt Division Quirk:
+#### BigInt Division Quirk
+
 Because `BigInt` handles only integers, division drops decimal fractions (truncates towards zero):
 
 ```javascript
@@ -231,14 +246,16 @@ console.log(5n / 2n); // 2n (not 2.5n)
 
 Strings are sequences of characters used to store textual data.
 
-#### String Literals:
+#### String Literals
+
 ```javascript
 let single = 'Single Quotes';
 let double = "Double Quotes";
 let template = `Template literal: ${single}`; // Supports interpolation & multiline
 ```
 
-#### Immutability of Strings:
+#### Immutability of Strings
+
 Strings in JavaScript are **immutable**. Once created, individual characters cannot be mutated in place:
 
 ```javascript
@@ -248,11 +265,12 @@ console.log(word); // "hello" (Unchanged)
 ```
 
 To alter a string, you must derive a new string:
+
 ```javascript
 word = "H" + word.slice(1); // "Hello"
 ```
 
-#### Essential String Methods & Properties:
+#### Essential String Methods & Properties
 
 | Method / Property | Description | Example |
 | :--- | :--- | :--- |
@@ -264,6 +282,7 @@ word = "H" + word.slice(1); // "Hello"
 | `.toLowerCase()` | Converts string to lowercase. | `"DEV".toLowerCase()` $\rightarrow$ `"dev"` |
 
 #### Quirk: Unicode, Emojis, and `.length`
+
 JavaScript strings use **UTF-16 code units**. Characters with code points exceeding `0xFFFF` (such as emojis or rare historical scripts) require two 16-bit code units, known as a **surrogate pair**:
 
 ```javascript
@@ -280,10 +299,12 @@ console.log("👨‍👩‍👧‍👦".length); // 11
 
 Booleans represent logical truth values and can have only one of two states: `true` or `false`.
 
-#### Truthy vs. Falsy Values:
+#### Truthy vs. Falsy Values
+
 When evaluated in a boolean context (such as an `if` statement or ternary operation), every value in JavaScript evaluates to either truthy or falsy.
 
-#### The 8 Falsy Values in JavaScript:
+#### The 8 Falsy Values in JavaScript
+
 Any value that is not on this list is automatically **truthy**:
 
 1. `false`
@@ -295,7 +316,8 @@ Any value that is not on this list is automatically **truthy**:
 7. `undefined`
 8. `NaN`
 
-#### Truthy Examples That Catch Beginners Off Guard:
+#### Truthy Examples That Catch Beginners Off Guard
+
 ```javascript
 if ([])      { /* Executes: Empty arrays are objects, hence truthy */ }
 if ({})      { /* Executes: Empty objects are truthy */ }
@@ -316,7 +338,8 @@ While both represent the absence of a value, they serve distinct semantic purpos
 | **Default Context** | Default value of uninitialized variables or functions with no `return`. | Must be explicitly assigned by the developer. |
 | **`typeof` Output** | `"undefined"` | `"object"` *(Historical JS Bug)* |
 
-#### The Famous `typeof null` Bug:
+#### The Famous `typeof null` Bug
+
 ```javascript
 console.log(typeof null); // "object"
 ```
@@ -325,6 +348,7 @@ console.log(typeof null); // "object"
 > In the first implementation of JavaScript (1995), values were represented with a type tag. Object references had the type tag `0`. `null` was represented as a NULL pointer (`0x00`), causing `typeof` to mistakenly read it as an object. This bug has been intentionally preserved for backwards compatibility with legacy web applications.
 
 #### Comparison: Loose vs. Strict Equality
+
 ```javascript
 console.log(null === undefined); // false (Different types)
 console.log(null == undefined);  // true  (Coerced to equality under loose comparison)
@@ -351,6 +375,7 @@ console.log(typeof id1);   // "symbol"
 ## 6. Non-Primitive Data Types: Objects
 
 Any data type that is not a primitive is an **Object**. This encompasses:
+
 - Plain Objects (`{}`)
 - Arrays (`[]`)
 - Functions (`function() {}`)
@@ -363,6 +388,7 @@ Any data type that is not a primitive is an **Object**. This encompasses:
 Understanding how primitives and objects are handled in memory is one of the most critical concepts in JavaScript.
 
 #### 1. Primitives: Copied by Value
+
 When assigning or copying primitive variables, the JavaScript engine creates a brand new, independent duplicate of the value in memory:
 
 ```javascript
@@ -384,6 +410,7 @@ y: [ 20 ]  <-- Independent cell
 ---
 
 #### 2. Objects: Copied by Reference
+
 Variables assigned to objects do **not** store the object data itself directly in their memory slot. Instead, they store a **reference (pointer to the memory address)** in the heap where the object lives:
 
 ```javascript
@@ -435,7 +462,7 @@ console.log(arr1 === arr2); // true
 | **BigInt** | Primitive | `"bigint"` | Arbitrary precision integer. Suffix with `n` (`100n`). Division truncates decimals. |
 | **String** | Primitive | `"string"` | Immutable. UTF-16 code units (emojis take 2 code units). |
 | **Boolean** | Primitive | `"boolean"` | `true` or `false`. 8 falsy values in JS; everything else is truthy. |
-| **Undefined**| Primitive | `"undefined"` | Variable declared but not assigned. |
+| **Undefined** | Primitive | `"undefined"` | Variable declared but not assigned. |
 | **Null** | Primitive | `"object"` | Deliberate empty value. `typeof null === "object"` is a legacy bug. |
 | **Symbol** | Primitive | `"symbol"` | Guaranteed unique and immutable identifier. |
 | **Object** | Non-Primitive | `"object"` / `"function"` | Stored and copied **by reference**. Distinct objects are never equal by `===`. |
